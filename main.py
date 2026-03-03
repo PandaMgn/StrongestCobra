@@ -1,6 +1,10 @@
 import pygame
 import random
 
+import menu
+import player
+import gameworld
+
 
 WIDTH = 360
 HEIGHT = 480
@@ -31,6 +35,6 @@ while running:
 
     all_sprites.draw(screen)
 
-    pygame.display.flip()       
+    pygame.display.flip()
 
 pygame.quit()

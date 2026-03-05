@@ -6,8 +6,8 @@ import player
 import gameworld
 
 
-WIDTH = 360
-HEIGHT = 480
+WIDTH = 540
+HEIGHT = 960
 FPS = 30
 
 BLACK = (0, 0, 0)

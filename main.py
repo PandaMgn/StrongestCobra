@@ -14,7 +14,7 @@ class State(enum.Enum):
 
 WIDTH = 540
 HEIGHT = 960
-FPS = 30
+FPS = 60
 
 BLACK = (0, 0, 0)
 
@@ -25,10 +25,9 @@ pygame.display.set_caption("Strongest Cobra")
 clock = pygame.time.Clock()
 
 
-all_sprites = pygame.sprite.Group()
+all_sprites = pygame.sprite.Group(Player((200, 200), 5))
 
 game_state = State.MENU
-player = None
 
 running = True
 while running:
@@ -39,17 +38,16 @@ while running:
         if event.type == pygame.K_ESCAPE:
             running = False
 
-    all_sprites.update()
+    
     screen.fill(BLACK)
     
     match game_state:
         case State.MENU:
             if pygame.key.get_pressed()[pygame.K_SPACE]:
                 game_state = State.GAME
-                player = Player(200, 200, 1, screen)
         case State.GAME:
-            player.updatePosition(pygame.key.get_pressed())
-            print(f"x: {player.x}, y: {player.y}")
+            all_sprites.update()
+            pass
         case State.END:
             pass
 

@@ -1,25 +1,35 @@
 import pygame
+import math
 
-class Player:
-    x = None
-    y = None
-    velocity = 0
-    screen = None
-    moveCooldown = None
+class Player(pygame.sprite.Sprite):
+    pos = None
+    velocity = None
+    def __init__(self, pos, velocity):
+        super(Player, self).__init__()
+        #self.image = pygame.Surface((120, 120), pygame.SRCALPHA)
+        self.image = pygame.image.load("assets/CoolCobra.png")
+        pygame.draw.polygon(self.image, (0, 100, 240), [(60, 0), (120, 120), (0, 120)])
+        self.rect = self.image.get_rect(center=pos)
+        self.mask = pygame.mask.from_surface(self.image)
 
-    def __init__(self, x, y, velocity, screen):
-        self.x = x
-        self.y = y
+        self.pos = pos
         self.velocity = velocity
-        self.screen = screen
     
-    def updatePosition(self, keys):
+    def update(self):
+        keys = pygame.key.get_pressed()
+        dx = 0
+        dy = 0
         if keys[pygame.K_LEFT]:
-            self.x -= self.velocity
+            dx -= 1
         if keys[pygame.K_UP]:
-            self.y -= self.velocity
+            dy -= 1
         if keys[pygame.K_RIGHT]:
-            self.x += self.velocity
+            dx += 1
         if keys[pygame.K_DOWN]:
-            self.y -= self.velocity
+            dy += 1
         
+        hypotenuse = math.hypot(dx, dy)
+        if hypotenuse > 0:
+            dx = dx/hypotenuse*self.velocity
+            dy = dy/hypotenuse*self.velocity
+            self.rect.move_ip(dx, dy)

@@ -4,48 +4,85 @@ class Menu:
     '''
     class for the screens shown during the game
     '''
-    def __init__(self, font, font_color=WHITE, bg_color = BLACK):
+    def __init__(self, screen, font, font_color):
+        self.screen = screen
+        self.w, self.h = screen.get_size()
         self.font = font
         self.font_color = font_color
+        self.state = "start"
+        
+        #buttons
+        self.start_button =  Button("Start Game", (self.w/2, self.h/1.5), (200, 50), self.font, (255,0,255), (255,0,0)) #button in here becaues its an object and not temporary
+        #self.ability_button = Button()
+        #self.replay_button = Button("Replay Game", (self.w/2, self.h/1.5), (200, 50), self.font, (255,0,255), (255,0,0))
+        
+    
+    def draw_start_screen(self): #draw the start screen, just the start button and title, maybe add more images later
+        self.screen.fill((0,0,0)) #maybe change to bakcground img later
+        
+        title = self.font.render("My Game", True, self.font_color)
+        titleRect = title.get_rect()
+        titleRect.center = (self.w/2, self.h/4)
+        self.screen.blit(title, titleRect)
 
-    def draw(self, screen):
-        screen.fill(self.bg_color)
+        self.start_button.draw(self.screen)
+        
+    def draw_character_screen(self):
+        None
 
-    class start_menu:
-        def __init__(self, status, screen, ):
-            screen.fill((0,0,0))
+    def draw_game_screen(self):
+        None
+        
+    def draw_end_screen(self):
+        None
+        
+    def draw(self):
+        if self.state == "start":
+            self.draw_start_screen()
+'''
+        elif self.state == "choose_character": #maybe merge with start game?
+            self.draw_character_screen()
 
-        def draw(screen, bacbackground):
-            pygame.font.init()
-            w, h = screen.get_size()
-            font = pygame.font.SysFont('arial', 48)
-            text = font.render("Strongest Cobra", True, (255, 255, 255))
-            textRect = text.get_rect()
-            textRect.center = w // 2, h // 5
+        elif self.state == "game":
+            self.draw_game_screen()   #??? maybe not needed
+
+        elif self.state == "ending":
+            self.draw_end_screen()
+'''
 
 class Button:
-    #Cickable button Class
-    def __init__(self, text, pos, size):
+    '''
+    class for the buttons used in the menues
+    '''
+    def __init__(self, text, pos, size, font, color, text_color):
         self.text = text
         self.rect = pygame.Rect(pos,size)
-
-    def draw(self, surface):
-        #fix do not create 2nd event handler
-        '''
-        mouse down, save, pos as bool, mouse up, check if on button, shwo sprite while and hover
-        '''
-        start_down = False
-        for event in pygame.event.get():  
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                mousedown_pos = pygame.mouse.get_pos()
-                if self.rect.collidepoint(mousedown_pos):
-                    return start_down == True
-            if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-                mouseup_pos =  pygame.mouse.get_pos()
-                if self.rect.collidepoint(mousedown_pos) and self.rect.collidepoint(mouseup_pos):
-                    print("HHHHHH")
-                    return event.type == pygame.MOUSEBUTTONDOWN and event.button == 1
-
+        self.font = font
+        self.color = color
+        self.text_color = text_color
+        self.hover_color = (min(color[0]+25,255), min(color[1]+25,255), min(color[2]+25,255))
+        
+        self.pressed = False
+        
+    def draw(self, screen):
+        mouse_pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(mouse_pos): #change color if hover overed
+            pygame.draw.rect(screen, self.hover_color, self.rect)
         else:
-            None
+            pygame.draw.rect(screen, self.color, self.rect)
 
+        text_surface = self.font.render(self.text,True,self.text_color) #draw text in button
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        screen.blit(text_surface, text_rect)
+        
+    def is_clicked(self, event): #check if clicked
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if self.rect.collidepoint(event.pos):
+                self.pressed = True
+
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            if self.pressed and self.rect.collidepoint(event.pos):
+                self.pressed = False
+                return True
+            self.pressed = False
+        return False

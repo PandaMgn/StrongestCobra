@@ -1,30 +1,29 @@
 import pygame
 
-class Menu:
+class Game_Screen:
     '''
     class for the screens shown during the game
     '''
-    def __init__(self, screen, font, font_color):
+    def __init__(self, screen, title_font, subtitle_font, font_color):
         self.screen = screen
         self.w, self.h = screen.get_size()
-        self.font = font
+        self.title_font = title_font
+        self.subtitle_font = subtitle_font
         self.font_color = font_color
-        self.state = "start"
         
         #buttons
-        self.start_button =  Button("Start Game", (self.w/2, self.h/1.5), (200, 50), self.font, (255,0,255), (255,0,0)) #button in here becaues its an object and not temporary
+        self.start_button =  Button("Start Game", (self.w/2.5, self.h/1.5), (200, 50), self.subtitle_font, (255,0,255), (255,0,0)) #button in here becaues its an object and not temporary
         #self.ability_button = Button()
         #self.replay_button = Button("Replay Game", (self.w/2, self.h/1.5), (200, 50), self.font, (255,0,255), (255,0,0))
         
     
     def draw_start_screen(self): #draw the start screen, just the start button and title, maybe add more images later
-        self.screen.fill((0,0,0)) #maybe change to bakcground img later
         
-        title = self.font.render("My Game", True, self.font_color)
+        self.screen.fill(0,0,0)
+        title = self.title_font.render("My Game", True, (255,255,255))
         titleRect = title.get_rect()
         titleRect.center = (self.w/2, self.h/4)
         self.screen.blit(title, titleRect)
-
         self.start_button.draw(self.screen)
         
     def draw_character_screen(self):
@@ -35,20 +34,7 @@ class Menu:
         
     def draw_end_screen(self):
         None
-        
-    def draw(self):
-        if self.state == "start":
-            self.draw_start_screen()
-'''
-        elif self.state == "choose_character": #maybe merge with start game?
-            self.draw_character_screen()
 
-        elif self.state == "game":
-            self.draw_game_screen()   #??? maybe not needed
-
-        elif self.state == "ending":
-            self.draw_end_screen()
-'''
 
 class Button:
     '''

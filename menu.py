@@ -4,37 +4,37 @@ class Game_Screen:
     '''
     class for the screens shown during the game
     '''
-    def __init__(self, screen, title_font, subtitle_font, font_color):
+    def __init__(self, screen, title_font, subtitle_font):
         self.screen = screen
         self.w, self.h = screen.get_size()
         self.title_font = title_font
         self.subtitle_font = subtitle_font
-        self.font_color = font_color
         
         #buttons
-        self.start_button =  Button("Start Game", (self.w/2.5, self.h/1.5), (200, 50), self.subtitle_font, (255,0,255), (255,0,0)) #button in here becaues its an object and not temporary
-        #self.ability_button = Button()
-        #self.replay_button = Button("Replay Game", (self.w/2, self.h/1.5), (200, 50), self.font, (255,0,255), (255,0,0))
+        self.start_button =  Button("Start Game", (self.w/2, self.h/1.5), (200, 50), self.subtitle_font, (255,255,255), (0,0,0)) #button in here becaues its an object and not temporary
+        self.ability_button = Button("Ability", (self.w/8, self.h/1.05), (100, 50), self.subtitle_font, (255,255,255), (0,0,0)) #bottom left corner for now
+        self.replay_button = Button("Replay Game", (self.w/2, self.h/1.5), (200, 50), self.subtitle_font, (255,255,255), (0,0,0))
         
     
-    def draw_start_screen(self): #draw the start screen, just the start button and title, maybe add more images later
-        
-        self.screen.fill(0,0,0)
+    def draw_start_screen(self): #add char select feature
+        self.screen.fill((0,0,0))
         title = self.title_font.render("My Game", True, (255,255,255))
         titleRect = title.get_rect()
         titleRect.center = (self.w/2, self.h/4)
         self.screen.blit(title, titleRect)
         self.start_button.draw(self.screen)
         
-    def draw_character_screen(self):
-        None
-
     def draw_game_screen(self):
-        None
+        self.screen.fill((0,0,0))
+        self.ability_button.draw(self.screen)
         
     def draw_end_screen(self):
-        None
-
+        self.screen.fill((0,0,0))
+        title = self.title_font.render("My Game", True, (255,255,255))
+        titleRect = title.get_rect()
+        titleRect.center = (self.w/2, self.h/4)
+        self.screen.blit(title, titleRect)
+        self.replay_button.draw(self.screen)
 
 class Button:
     '''
@@ -43,6 +43,7 @@ class Button:
     def __init__(self, text, pos, size, font, color, text_color):
         self.text = text
         self.rect = pygame.Rect(pos,size)
+        self.rect.center = pos
         self.font = font
         self.color = color
         self.text_color = text_color

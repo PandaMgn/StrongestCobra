@@ -27,8 +27,9 @@ clock = pygame.time.Clock()
 #screen stuff or smth
 title_font = pygame.font.Font(None, 50)
 subtitle_font = pygame.font.Font(None, 40)
-button_font = pygame.font.Font(None, 30)
-start_screen = menu.Game_Screen(screen, title_font, subtitle_font, (255, 255, 255))
+start_screen = menu.Game_Screen(screen, title_font, subtitle_font)
+game_screen = menu.Game_Screen(screen, title_font, subtitle_font)
+end_screen = menu.Game_Screen(screen, title_font, subtitle_font)
 
 
 all_sprites = pygame.sprite.Group(Player((200, 200), 5))
@@ -47,17 +48,22 @@ while running:
 
     match game_state:
         case State.MENU:
-            menu.Game_Screen.draw_start_screen(start_screen)
-            if pygame.key.get_pressed()[pygame.K_SPACE]:
+            start_screen.draw_start_screen()
+            if start_screen.start_button.is_clicked(event):
                 game_state = State.GAME
 
         case State.GAME:
+            game_screen.draw_game_screen()
+            if game_screen.ability_button.is_clicked(event) or pygame.key.get_pressed()[pygame.K_SPACE]:
+                game_state = State.END #here for now
+        
             all_sprites.update()
             all_sprites.draw(screen)
-            screen.fill(BLACK)
-            pass
+                
         case State.END:
-            pass
+            end_screen.draw_end_screen()
+            if end_screen.replay_button.is_clicked(event):
+                game_state = State.MENU
 
     pygame.display.flip()
 

@@ -7,7 +7,7 @@ class Car:
     '''
     def __init__(self, pos, screen, direction = "R"): 
         super().__init__()
-        self.image = pygame.image.load(f"assets/Car ({random.randint(1,5)}).png").convert()  # load a random one of the five sprites for the car
+        self.image = pygame.image.load(f"assets/Car ({random.randint(1,3)}).png").convert()  # load a random one of the five sprites for the car
         self.image = pygame.transform.scale(self.image, (50,50))
         self.x, self.y = pos
         self.rect = self.image.get_rect(center=(self.x, self.y))
@@ -19,8 +19,8 @@ class Car:
     def create(self):
         if self.direction == "R": # Place the abalone randomly on the screen, starting between 20-100 pixels beyond the right hand side of the screen
             self.rect = self.image.get_rect(center=(
-                random.randint(20, self.screen_w - 20),
-                random.randint(50, 50),))
+                random.randint(20, self.screen_w - 20), #x
+                random.randint(50, 50),)) #y
 
     def Update(self):
         # position is shifted in y-direction only, based on the sprite's speed

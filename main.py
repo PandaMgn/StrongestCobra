@@ -1,7 +1,7 @@
 import pygame
 import random
 import enum
-
+import car
 import menu
 from player import Player
 import gameworld
@@ -37,6 +37,9 @@ all_sprites = pygame.sprite.Group(Player((200, 200), 5))
 game_state = State.MENU
 
 running = True
+
+carGrp = pygame.sprite.Group()
+
 while running:
     clock.tick(FPS)
     for event in pygame.event.get():
@@ -44,6 +47,13 @@ while running:
             running = False
         if event.type == pygame.K_ESCAPE:
             running = False
+
+        '''
+        if pygame.key.get_pressed()[pygame.K_1]:
+            #  Create the new food
+            new_food = car.Car((50, 50), screen, direction = "R")
+            # Add new food to the food group and to the all sprites group
+        '''
 
 
     match game_state:
@@ -55,11 +65,11 @@ while running:
         case State.GAME:
             game_screen.draw_game_screen()
             if game_screen.ability_button.is_clicked(event) or pygame.key.get_pressed()[pygame.K_SPACE]:
-                game_state = State.END #here for now
-        
+                game_state = State.END #here for now prolly change later ig           
+
             all_sprites.update()
-            all_sprites.draw(screen)
-                
+            all_sprites.draw(screen)         
+
         case State.END:
             end_screen.draw_end_screen()
             if end_screen.replay_button.is_clicked(event):

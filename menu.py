@@ -18,7 +18,7 @@ class Game_Screen:
     
     def draw_start_screen(self): #add char select feature
         self.screen.fill((0,0,0))
-        title = self.title_font.render("My Game", True, (255,255,255))
+        title = self.title_font.render("Strongest Cobra", True, (255,255,255))
         titleRect = title.get_rect()
         titleRect.center = (self.w/2, self.h/4)
         self.screen.blit(title, titleRect)
@@ -30,7 +30,7 @@ class Game_Screen:
         
     def draw_end_screen(self):
         self.screen.fill((0,0,0))
-        title = self.title_font.render("My Game", True, (255,255,255))
+        title = self.title_font.render("Game Over", True, (255,255,255))
         titleRect = title.get_rect()
         titleRect.center = (self.w/2, self.h/4)
         self.screen.blit(title, titleRect)

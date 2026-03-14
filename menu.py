@@ -34,7 +34,12 @@ class Game_Screen:
         titleRect = title.get_rect()
         titleRect.center = (self.w/2, self.h/4)
         self.screen.blit(title, titleRect)
+        subtitle = self.subtitle_font.render("Your Score: ", True, (255,255,255))
+        subtitleRect = subtitle.get_rect()
+        subtitleRect.center = (self.w/2, self.h/3)
+        self.screen.blit(subtitle, subtitleRect)
         self.replay_button.draw(self.screen)
+        
 
 class Button:
     '''

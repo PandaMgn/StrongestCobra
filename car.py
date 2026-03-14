@@ -1,40 +1,41 @@
 import pygame
 import random
 
-class Car:
+class Car(pygame.sprite.Sprite):
     '''
-    Class for the enemy thing or smth
+    Class for the enemy thing or something
     '''
-    def __init__(self, pos, screen, direction = "R"): 
+    def __init__(self, y, screen, direction = "R"): 
         super().__init__()
-        self.image = pygame.image.load(f"assets/Car ({random.randint(1,3)}).png").convert()  # load a random one of the five sprites for the car
-        self.image = pygame.transform.scale(self.image, (50,50))
-        self.x, self.y = pos
-        self.rect = self.image.get_rect(center=(self.x, self.y))
-        self.speed = random.randint(5,10)
+        self.image = pygame.image.load(f"assets/Car ({random.randint(1,3)}).png").convert_alpha()  # load a random one of the five sprites for the car
+        self.image = pygame.transform.scale(self.image, (75, 75))
+        self.rect = self.image.get_rect()
+        self.speed = random.randint(3, 5)
         self.direction = direction
-        self.screen_w, self.screen_h = screen.get_size()
         self.screen = screen
-
-    def create(self):
-        if self.direction == "R": # Place the abalone randomly on the screen, starting between 20-100 pixels beyond the right hand side of the screen
-            self.rect = self.image.get_rect(center=(
-                random.randint(20, self.screen_w - 20), #x
-                random.randint(50, 50),)) #y
-
-    def Update(self):
-        # position is shifted in y-direction only, based on the sprite's speed
-        self.rect.move_ip(0, self.speed)
-        # if off screen, kill/destroy the object
-        if self.rect.top > self.screen_h:
-            self.kill()
-    
-
-    '''
-    def move_enemy(self):
+        self.screen_w, self.screen_h = screen.get_size()
+        
+        if direction == "R":
+            self.rect.x = -self.rect.width
+            self.rect.y = y
+        else:
+            self.image = pygame.transform.flip(self.image, True, False) #flip cause it gotta face L direction
+            self.rect.x = self.screen_w
+            self.rect.y = y
+                    
+    def update(self):
+        dx = 0
         if self.direction == "R": #if the car moves from left to right
-            self.rect.move_ip(self.x+self.speed, self.y)
+            dx -= self.speed
+        else:#if the car goes the other diretion than that one up there
+            dx += self.speed
+        self.rect.move_ip(self.speed, 0)    
+            
+        if self.rect.right < 0 or self.rect.left > self.screen_w:
+            self.kill()
 
-        else: #if the car goes the other diretion than that one up there
-            self.rect.move_ip(self.x-self.speed, self.y)
-    '''
+            
+    def is_collide(self, event): #check if clicked
+        if self.rect.collidepoint(event.pos):
+            return True
+        return False

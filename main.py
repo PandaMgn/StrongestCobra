@@ -16,8 +16,8 @@ class State(enum.Enum):
     GAME = enum.auto()
     END = enum.auto()
 
-#screen stuff
-WIDTH = 540
+
+WIDTH = 640
 HEIGHT = 960
 FPS = 60
 BLACK = (0, 0, 0)
@@ -39,11 +39,10 @@ end_screen = menu.Game_Screen(screen, title_font, subtitle_font)
 
 all_sprites = pygame.sprite.Group(Player((200, 200), 5, screen))
 carGrp = pygame.sprite.Group()
-
+gameworld = gameworld.Game_World(screen)
 
 game_state = State.MENU
 running = True
-spawn_timer = 0
 
 while running:
     clock.tick(FPS)
@@ -52,14 +51,6 @@ while running:
             running = False
         if event.type == pygame.K_ESCAPE:
             running = False
-
-        '''
-        if pygame.key.get_pressed()[pygame.K_1]:
-            #  Create the new food
-            new_food = car.Car((50, 50), screen, direction = "R")
-            # Add new food to the food group and to the all sprites group
-        '''
-
 
     match game_state:
         case State.MENU:
@@ -72,15 +63,16 @@ while running:
             if game_screen.ability_button.is_clicked(event) or pygame.key.get_pressed()[pygame.K_SPACE]:
                 game_state = State.END #here for now prolly change later ig 
              
-            spawn_timer += 1
-            if spawn_timer > 15:
-                spawn_timer = 0
-                lane_y = random.choice([100, 400, 700])
-                direction = random.choice(["R", "L"])
-                new_car = car.Car(lane_y, screen, direction)
-                carGrp.add(new_car)
-                all_sprites.add(new_car)          
-                                
+            cars = gameworld.spawn_lane()
+            for new_car in cars:
+                if new_car:
+                    print("67")
+                    carGrp.add(new_car)
+                    all_sprites.add(new_car)
+            
+            for sprite in all_sprites:
+                sprite.rect.y += 1 #gravity
+              
             all_sprites.update()
             all_sprites.draw(screen)         
 

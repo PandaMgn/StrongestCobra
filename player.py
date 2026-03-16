@@ -23,18 +23,20 @@ class Player(pygame.sprite.Sprite):
         dx = 0
         dy = 0
         if keys[pygame.K_LEFT]:
-            dx -= 1
+            dx -= 5
         if keys[pygame.K_UP]:
-            dy -= 1
+            dy -= 5
         if keys[pygame.K_RIGHT]:
-            dx += 1
+            dx += 5
         if keys[pygame.K_DOWN]:
-            dy += 1
+            dy += 5
         
+        '''
         hypotenuse = math.hypot(dx, dy)
         if hypotenuse > 0:
             dx = dx/hypotenuse*self.velocity
             dy = dy/hypotenuse*self.velocity
-            self.rect.move_ip(dx, dy)
+        '''
+        self.rect.move_ip(dx, dy)
             
         self.rect.clamp_ip(self.screen.get_rect())

@@ -7,7 +7,7 @@ class Car(pygame.sprite.Sprite):
     '''
     def __init__(self, y, screen, speed, direction): 
         super().__init__()
-        self.image = pygame.image.load(f"assets/Car ({random.randint(1,3)}).png").convert_alpha()  # load a random one of the five sprites for the car
+        self.image = pygame.image.load(f"assets/Car ({random.randint(1,5)}).png").convert_alpha()  # load a random one of the five sprites for the car
         self.image = pygame.transform.scale(self.image, (75, 75))
         self.rect = self.image.get_rect()
         self.speed = speed

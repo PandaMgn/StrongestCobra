@@ -17,7 +17,7 @@ class Game_World:
         
     def spawn_lane(self):
         
-        #starting two lanes
+        #starting lanes
         if len(self.lanes) <= 1:
             lane = Lane(self.screen, random.randint(3,5), random.choice(["R", "L"]), 400)
             self.lanes.append(lane)
@@ -56,7 +56,7 @@ class Lane(pygame.sprite.Sprite):
         self.direction = direction
         self.pos = y
         
-        self.image = pygame.image.load("assets/Roudhouse.png").convert_alpha()
+        self.image = pygame.image.load("assets/Road.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (self.w, 100))
         self.rect = self.image.get_rect()
         self.rect.center = (self.w/2, y)

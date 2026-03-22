@@ -36,8 +36,8 @@ start_screen = menu.Game_Screen(screen, title_font, subtitle_font)
 game_screen = menu.Game_Screen(screen, title_font, subtitle_font)
 end_screen = menu.Game_Screen(screen, title_font, subtitle_font)
 
-
-all_sprites = pygame.sprite.Group(Player((200, 200), 5, screen))
+player = Player((200, 200), 5, screen)
+all_sprites = pygame.sprite.Group(player)
 carGrp = pygame.sprite.Group()
 gameworld = gameworld.Game_World(screen)
 
@@ -66,12 +66,15 @@ while running:
             cars = gameworld.spawn_lane()
             for new_car in cars:
                 if new_car:
-                    print("67")
                     carGrp.add(new_car)
                     all_sprites.add(new_car)
             
             for sprite in all_sprites:
                 sprite.rect.y += 1 #gravity
+            
+            if pygame.sprite.spritecollide(player, carGrp, False, pygame.sprite.collide_mask):
+                game_state = State.END
+    
               
             all_sprites.update()
             all_sprites.draw(screen)         

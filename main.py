@@ -37,30 +37,45 @@ game_screen = menu.Game_Screen(screen, title_font, subtitle_font)
 end_screen = menu.Game_Screen(screen, title_font, subtitle_font)
 
 player = Player((200, 200), 5, screen)
-all_sprites = pygame.sprite.Group(player)
+all_sprites = pygame.sprite.Group()
 carGrp = pygame.sprite.Group()
 gameworld = gameworld.Game_World(screen)
-
 game_state = State.MENU
 running = True
 
 while running:
     clock.tick(FPS)
+    
+    space_pressed = False
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.K_ESCAPE:
-            running = False
+            
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
+            if event.key == pygame.K_SPACE:
+                space_pressed = True
 
+            
     match game_state:
         case State.MENU:
             start_screen.draw_start_screen()
-            if start_screen.start_button.is_clicked(event):
+            if start_screen.start_button.is_clicked(event) or space_pressed:
+                all_sprites.add(player)
                 game_state = State.GAME
 
         case State.GAME:
             game_screen.draw_game_screen()
-            if game_screen.ability_button.is_clicked(event) or pygame.key.get_pressed()[pygame.K_SPACE]:
+            
+            
+            '''here for testing'''
+            if game_screen.ability_button.is_clicked(event) or space_pressed:
+                gameworld.reset()
+                all_sprites.empty()
+                carGrp.empty()
+                player.reset()
                 game_state = State.END #here for now prolly change later ig 
              
             cars = gameworld.spawn_lane()
@@ -73,6 +88,10 @@ while running:
                 sprite.rect.y += 1 #gravity
             
             if pygame.sprite.spritecollide(player, carGrp, False, pygame.sprite.collide_mask):
+                gameworld.reset()
+                all_sprites.empty()
+                carGrp.empty()
+                player.reset()
                 game_state = State.END
     
               
@@ -81,11 +100,7 @@ while running:
 
         case State.END:
             end_screen.draw_end_screen()
-            if end_screen.replay_button.is_clicked(event):
-                #reset player state each time
-                all_sprites.empty()
-                carGrp.empty()
-                all_sprites.add(Player((200, 200), 5, screen))
+            if end_screen.replay_button.is_clicked(event) or space_pressed:
                 game_state = State.MENU
 
     pygame.display.flip()

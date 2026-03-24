@@ -12,8 +12,9 @@ class Player(pygame.sprite.Sprite):
         pygame.draw.polygon(self.image, (0, 100, 240), [(15,0), (30,30), (0,30)])
         self.rect = self.image.get_rect(center=pos)
         self.screen = screen
-        self.rect.move_ip(self.screen.get_width()//8, self.screen.get_height()/1.5) #start game at bottom middle
         self.mask = pygame.mask.from_surface(self.image)
+        self.rect.center = (self.screen.get_width()/2, self.screen.get_height()/1.5) #start game at bottom middle
+
 
         self.pos = pos
         self.velocity = velocity
@@ -40,3 +41,6 @@ class Player(pygame.sprite.Sprite):
         self.rect.move_ip(dx, dy)
             
         self.rect.clamp_ip(self.screen.get_rect())
+        
+    def reset(self):
+        self.rect.center = (self.screen.get_width()/2, self.screen.get_height()/1.5) #start game at bottom middle

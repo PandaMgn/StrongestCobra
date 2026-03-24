@@ -33,9 +33,7 @@ class Car(pygame.sprite.Sprite):
             
         if self.rect.right < 0 or self.rect.left > self.screen_w:
             self.kill()
-
             
-    def is_collide(self, event): #check if clicked
-        if self.rect.collidepoint(event.pos):
-            return True
-        return False
+    def kill(self):
+        super().kill()
+            

@@ -19,18 +19,18 @@ class Game_World:
         
         #starting lanes
         if len(self.lanes) <= 1:
-            lane = Lane(self.screen, random.randint(3,5), random.choice(["R", "L"]), 400)
+            lane = Lane(self.screen, 400)
             self.lanes.append(lane)
-            lane = Lane(self.screen, random.randint(3,5), random.choice(["R", "L"]), 100)
+            lane = Lane(self.screen, 100)
             self.lanes.append(lane)
-            lane = Lane(self.screen, random.randint(3,5), random.choice(["R", "L"]), -200)
+            lane = Lane(self.screen, -200)
             self.lanes.append(lane)
-            lane = Lane(self.screen, random.randint(3,5), random.choice(["R", "L"]), -500)
+            lane = Lane(self.screen, -500)
             self.lanes.append(lane)    
             
                
         while len(self.lanes) < 4: #four lanes at a time, three on screen, one up there
-            lane = Lane(self.screen, random.randint(3,5), random.choice(["R", "L"]), -200)
+            lane = Lane(self.screen, -200)
             self.lanes.append(lane)
 
         cars = []
@@ -45,15 +45,21 @@ class Game_World:
                 self.lanes.remove(lane)
                 
         return cars
+    
+    def reset(self):
+        self.spawn_timer = 0
+        for lane in self.lanes:
+            lane.kill()
+        self.lanes = []
 
 class Lane(pygame.sprite.Sprite):
-    def __init__(self, screen, speed, direction, y):
+    def __init__(self, screen, y):
         super().__init__()
         self.screen = screen
         self.w, self.h = screen.get_size()
-        self.speed = speed
+        self.speed = random.randint(3,6)
         self.spawn_timer = 0
-        self.direction = direction
+        self.direction = random.choice(["R", "L"])
         self.pos = y
         
         self.image = pygame.image.load("assets/Road.png").convert_alpha()
@@ -63,7 +69,7 @@ class Lane(pygame.sprite.Sprite):
     
     def spawn_car(self):
         self.spawn_timer += random.randint(0,4)
-        if self.spawn_timer > 180:
+        if self.spawn_timer > 250:
             self.spawn_timer = 0
             new_car = car.Car(self.rect.y, self.screen, self.speed, self.direction)
             return new_car
@@ -72,5 +78,6 @@ class Lane(pygame.sprite.Sprite):
     def update(self):
         self.rect.y += 1 #gravity
         self.screen.blit(self.image, self.rect)
+
         
     

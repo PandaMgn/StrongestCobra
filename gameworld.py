@@ -58,7 +58,7 @@ class Lane(pygame.sprite.Sprite):
         self.screen = screen
         self.w, self.h = screen.get_size()
         self.speed = random.randint(3,6)
-        self.spawn_timer = 0
+        self.spawn_timer = 251 #spawn a car immediatley
         self.direction = random.choice(["R", "L"])
         self.pos = y
         

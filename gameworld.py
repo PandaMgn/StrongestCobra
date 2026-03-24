@@ -76,7 +76,6 @@ class Lane(pygame.sprite.Sprite):
         return None
     
     def update(self):
-        self.rect.y += 1 #gravity
         self.screen.blit(self.image, self.rect)
 
         

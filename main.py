@@ -84,9 +84,12 @@ while running:
                     carGrp.add(new_car)
                     all_sprites.add(new_car)
             
+            difference_pov_y = 1 + max(HEIGHT/2 - player.rect.centery, 0)/30
             for sprite in all_sprites:
-                sprite.rect.y += 1 #gravity
-            
+                sprite.rect.y += difference_pov_y #gravity
+            for lane in gameworld.lanes:
+                lane.rect.y += difference_pov_y
+
             if pygame.sprite.spritecollide(player, carGrp, False, pygame.sprite.collide_mask):
                 gameworld.reset()
                 all_sprites.empty()

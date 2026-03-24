@@ -2,13 +2,15 @@ import pygame
 import background
 import car
 import random
-
+import time
+import powerup
 
 class Game_World:
     def __init__(self, screen):
         self.screen = screen
         self.w, self.h = screen.get_size()
-        
+        self.score = 0
+
         #lanes for cars and stuff
         self.lanes = []
         
@@ -45,12 +47,25 @@ class Game_World:
                 self.lanes.remove(lane)
                 
         return cars
-    
+
+    def spawn_powerup(self):
+
+        powerups = []
+
+        for lane in self.lanes:
+            if random.choice < 5:
+                new_powerup = powerup.Powerup(self.screen)
+                powerups.append(new_powerup)
+
+        return powerups
+
+  
     def reset(self):
         self.spawn_timer = 0
         for lane in self.lanes:
             lane.kill()
         self.lanes = []
+        self.score = 0
 
 class Lane(pygame.sprite.Sprite):
     def __init__(self, screen, y):

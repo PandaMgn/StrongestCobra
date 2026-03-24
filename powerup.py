@@ -5,7 +5,7 @@ class Powerup(pygame.sprite.Sprite):
     '''
     Class for the powerup thing or something
     '''
-    def __init__(self, y, screen): 
+    def __init__(self, screen): 
         super().__init__()
         self.image = pygame.image.load(f"assets/Car ({random.randint(1,5)}).png").convert_alpha()  # load a random one of the five sprites for the car
         self.image = pygame.transform.scale(self.image, (75, 75))

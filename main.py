@@ -39,6 +39,9 @@ end_screen = menu.Game_Screen(screen, title_font, subtitle_font)
 player = Player((200, 200), 5, screen)
 all_sprites = pygame.sprite.Group()
 carGrp = pygame.sprite.Group()
+powerGroup = pygame.sprite.Group()
+
+
 gameworld = gameworld.Game_World(screen)
 game_state = State.MENU
 running = True
@@ -78,18 +81,33 @@ while running:
                 player.reset()
                 game_state = State.END #here for now prolly change later ig 
              
+
+            #spawn stuff
             cars = gameworld.spawn_lane()
             for new_car in cars:
                 if new_car:
                     carGrp.add(new_car)
                     all_sprites.add(new_car)
+
+
+            powerups = gameworld.spawn_powerup()
+            for powerup in powerups:
+                if new_car:
+                    powerGroup.add(powerup)
+                    all_sprites.add(powerup)
             
-            difference_pov_y = 1 + max(HEIGHT/2 - player.rect.centery, 0)/30
+            
+
+            #gravity stuff
+            difference_pov_y = 1 + max(HEIGHT/3.5 - player.rect.centery, 0)/30
             for sprite in all_sprites:
-                sprite.rect.y += difference_pov_y #gravity
+                sprite.rect.y += difference_pov_y
             for lane in gameworld.lanes:
                 lane.rect.y += difference_pov_y
 
+
+
+            #collision stuff
             if pygame.sprite.spritecollide(player, carGrp, False, pygame.sprite.collide_mask):
                 gameworld.reset()
                 all_sprites.empty()
@@ -98,6 +116,9 @@ while running:
                 game_state = State.END
     
               
+
+
+            #draw stuff
             all_sprites.update()
             all_sprites.draw(screen)         
 

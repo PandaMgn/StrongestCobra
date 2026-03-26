@@ -53,7 +53,7 @@ class Game_World:
         powerups = []
 
         for lane in self.lanes:
-            if random.choice < 5:
+            if random.random() < 0.05:
                 new_powerup = powerup.Powerup(self.screen)
                 powerups.append(new_powerup)
 

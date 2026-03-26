@@ -6,7 +6,6 @@ blah blah blah
 import pygame
 import random
 import enum
-import car
 import menu
 from player import Player
 import gameworld

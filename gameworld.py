@@ -52,9 +52,9 @@ class Game_World:
 
         powerups = []
 
-        for lane in self.lanes:
+        while len(powerups) < 1:
             if random.random() < 0.05:
-                new_powerup = powerup.Powerup(self.screen)
+                new_powerup = powerup.Powerup(self.screen, "Car (1)")
                 powerups.append(new_powerup)
 
         return powerups

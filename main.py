@@ -88,12 +88,12 @@ while running:
                     carGrp.add(new_car)
                     all_sprites.add(new_car)
 
-
-            powerups = gameworld.spawn_powerup()
-            for powerup in powerups:
-                if new_car:
-                    powerGroup.add(powerup)
-                    all_sprites.add(powerup)
+            if len(powerGroup) < 1:
+                powerups = gameworld.spawn_powerup()
+                for powerup in powerups:
+                    if new_car:
+                        powerGroup.add(powerup)
+                        all_sprites.add(powerup)
             
             
 
@@ -111,9 +111,16 @@ while running:
                 gameworld.reset()
                 all_sprites.empty()
                 carGrp.empty()
+                powerGroup.empty()
                 player.reset()
                 game_state = State.END
     
+            for powerup in powerGroup:
+                if pygame.sprite.spritecollide(player, powerGroup, False, pygame.sprite.collide_mask):
+                    powerup.kill()
+
+                if pygame.sprite.spritecollide(powerup, carGrp, False, pygame.sprite.collide_mask):
+                    powerup.kill()
               
 
 

@@ -12,7 +12,7 @@ class Game_Screen:
         
         #buttons
         self.start_button =  Button("Start Game", (self.w/2, self.h/1.5), (200, 50), self.subtitle_font, (255,255,255), (0,0,0)) #button in here becaues its an object and not temporary
-        self.ability_button = Button("Ability", (self.w/8, self.h/1.05), (100, 50), self.subtitle_font, (255,255,255), (0,0,0)) #bottom left corner for now
+        self.ability_button = Button("Ability", (50+15, self.h-25-15), (100, 50), self.subtitle_font, (255,255,255), (0,0,0)) #bottom left corner for now
         self.replay_button = Button("Replay Game", (self.w/2, self.h/1.5), (200, 50), self.subtitle_font, (255,255,255), (0,0,0))
         
     
@@ -26,15 +26,21 @@ class Game_Screen:
         
     def draw_game_screen(self):
         self.screen.fill((0,0,0))
-        self.ability_button.draw(self.screen)
         
-    def draw_end_screen(self):
+    def draw_game_menu(self, score):
+        self.ability_button.draw(self.screen)
+        title = self.title_font.render(f"Score: {score}", True, (255, 255, 255))
+        titleRect = title.get_rect()
+        titleRect.topleft = (12, 12)
+        self.screen.blit(title, titleRect)
+
+    def draw_end_screen(self, score):
         self.screen.fill((0,0,0))
         title = self.title_font.render("Game Over", True, (255,255,255))
         titleRect = title.get_rect()
         titleRect.center = (self.w/2, self.h/4)
         self.screen.blit(title, titleRect)
-        subtitle = self.subtitle_font.render("Your Score: ", True, (255,255,255))
+        subtitle = self.subtitle_font.render(f"Your Score: {score}", True, (255,255,255))
         subtitleRect = subtitle.get_rect()
         subtitleRect.center = (self.w/2, self.h/3)
         self.screen.blit(subtitle, subtitleRect)

@@ -52,10 +52,10 @@ class Game_World:
 
         powerups = []
 
-        while len(powerups) < 1:
-            if random.random() < 0.05:
-                new_powerup = powerup.Powerup(self.screen, "Car (1)")
-                powerups.append(new_powerup)
+
+        if random.random() < 0.01 and len(powerups) < 1:
+            new_powerup = powerup.Powerup(self.screen, "assets/Wings.png")
+            powerups.append(new_powerup)
 
         return powerups
 

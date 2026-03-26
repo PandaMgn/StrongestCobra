@@ -126,10 +126,12 @@ while running:
 
             #draw stuff
             all_sprites.update()
-            all_sprites.draw(screen)         
+            all_sprites.draw(screen)    
+                 
+            game_screen.draw_game_menu(player.score)
 
         case State.END:
-            end_screen.draw_end_screen()
+            end_screen.draw_end_screen(player.score)
             if end_screen.replay_button.is_clicked(event) or space_pressed:
                 game_state = State.MENU
 

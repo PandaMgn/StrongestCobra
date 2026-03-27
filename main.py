@@ -35,7 +35,7 @@ start_screen = menu.Game_Screen(screen, title_font, subtitle_font)
 game_screen = menu.Game_Screen(screen, title_font, subtitle_font)
 end_screen = menu.Game_Screen(screen, title_font, subtitle_font)
 
-player = Player((200, 200), 5, screen)
+player = Player((200, 200), 5, screen, "", "")
 all_sprites = pygame.sprite.Group()
 carGrp = pygame.sprite.Group()
 powerGroup = pygame.sprite.Group()
@@ -63,6 +63,11 @@ while running:
             
     match game_state:
         case State.MENU:
+            gameworld.reset()
+            all_sprites.empty()
+            carGrp.empty()
+            powerGroup.empty()
+            player.reset()
             start_screen.draw_start_screen()
             if start_screen.start_button.is_clicked(event) or space_pressed:
                 all_sprites.add(player)
@@ -71,16 +76,7 @@ while running:
         case State.GAME:
             game_screen.draw_game_screen()
             
-            
-            '''here for testing'''
-            if game_screen.ability_button.is_clicked(event) or space_pressed:
-                gameworld.reset()
-                all_sprites.empty()
-                carGrp.empty()
-                player.reset()
-                game_state = State.END #here for now prolly change later ig 
-             
-
+        
             #spawn stuff
             cars = gameworld.spawn_lane()
             for new_car in cars:
@@ -95,40 +91,38 @@ while running:
                         powerGroup.add(powerup)
                         all_sprites.add(powerup)
             
-            
-
             #gravity stuff
             difference_pov_y = 1 + max(HEIGHT/3.5 - player.rect.centery, 0)/30
             for sprite in all_sprites:
                 sprite.rect.y += difference_pov_y
             for lane in gameworld.lanes:
                 lane.rect.y += difference_pov_y
-
-
-            '''
+                           
             #collision stuff
-            if pygame.sprite.spritecollide(player, carGrp, False, pygame.sprite.collide_mask):
-                gameworld.reset()
-                all_sprites.empty()
-                carGrp.empty()
-                powerGroup.empty()
-                player.reset()
-                game_state = State.END
-            '''
+            hits = pygame.sprite.spritecollide(player, carGrp, False, pygame.sprite.collide_mask)
+            if hits:
+                player.take_damage()
+                if player.health == 0:
+                    game_state = State.END
+            
+
+            hit = pygame.sprite.spritecollide(player, powerGroup, False, pygame.sprite.collide_mask)
+            for powerup in hit:
+                powerup.kill()
+                player.fly()
+                #Player.fly()
 
 
-            for powerup in powerGroup:
-                if pygame.sprite.spritecollide(player, powerGroup, False, pygame.sprite.collide_mask):
-                    powerup.kill()
-                    print("hi")
-              
-
+            '''here for testing'''
+            if game_screen.ability_button.is_clicked(event) or space_pressed:
+                game_state = State.END #here for now prolly change later ig 
 
             #draw stuff
             all_sprites.update()
-            all_sprites.draw(screen)    
+            all_sprites.draw(screen)
+            screen.blit(player.image, player.rect)  # draw player LAST
                  
-            game_screen.draw_game_menu(player.score)
+            game_screen.draw_game_menu(player.score, player.health)
 
         case State.END:
             end_screen.draw_end_screen(player.score)

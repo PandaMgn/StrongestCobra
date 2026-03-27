@@ -24,15 +24,20 @@ class Game_Screen:
         self.screen.blit(title, titleRect)
         self.start_button.draw(self.screen)
         
-    def draw_game_screen(self):
+    def draw_game_screen(self): #if not here then overlays over everyting
         self.screen.fill((0,0,0))
         
-    def draw_game_menu(self, score):
+    def draw_game_menu(self, score, health):
         self.ability_button.draw(self.screen)
-        title = self.title_font.render(f"Score: {score}", True, (255, 255, 255))
-        titleRect = title.get_rect()
+        score_title = self.title_font.render(f"Score: {score}", True, (255, 255, 255))
+        titleRect = score_title.get_rect()
         titleRect.topleft = (12, 12)
-        self.screen.blit(title, titleRect)
+        self.screen.blit(score_title, titleRect)
+        
+        health_title = self.title_font.render(f"Health: {health}", True, (255, 255, 255))
+        titleRect = health_title.get_rect()
+        titleRect.topleft = (12, 60)
+        self.screen.blit(health_title, titleRect)
 
     def draw_end_screen(self, score):
         self.screen.fill((0,0,0))

@@ -8,20 +8,30 @@ class Player(pygame.sprite.Sprite):
 
     abs_posy = 0
     score = 0
-    def __init__(self, pos, velocity, screen):
+    def __init__(self, pos, velocity, screen, normal_image, ability_image):
         super(Player, self).__init__()
-        #self.image = pygame.Surface((120, 120), pygame.SRCALPHA)
-        self.image = pygame.image.load("assets/CoolCobra.png").convert_alpha()
-        self.image = pygame.transform.scale(self.image, (120,120))
-        #pygame.draw.polygon(self.image, (0, 100, 240), [(15,0), (30,30), (0,30)])
-        self.rect = self.image.get_rect(center=pos)
+        
+        self.normal_image = pygame.image.load("assets/CoolCobra.png").convert_alpha()
+        self.fly_image = pygame.image.load("assets/WingedCobra.png").convert_alpha()
+        self.normal_image = pygame.transform.scale(self.normal_image, (100,100))
+        self.fly_image = pygame.transform.scale(self.fly_image, (140,140))
+        self.image = self.normal_image
+        
         self.screen = screen
-        self.mask = pygame.mask.from_surface(self.image)
+        self.rect = self.image.get_rect(center=pos)
         self.rect.center = (self.screen.get_width()/2, self.screen.get_height()/1.5) #start game at bottom middle
+        self.mask = pygame.mask.from_surface(self.image)
 
+        self.health = 3
+        self.invincible = False
+        self.powerup_duration = 0 #just invincibility
+        
+        self.ability_rect = pygame.Rect(0,0,200,200) #zone around player that activates ability
+        self.ability_cd = 0
 
         self.pos = pos
         self.velocity = velocity
+    
     
     def update(self):
         keys = pygame.key.get_pressed()
@@ -38,15 +48,47 @@ class Player(pygame.sprite.Sprite):
         
         self.abs_posy -= dy
         self.score = max(self.score, self.abs_posy//300)
-        '''
-        hypotenuse = math.hypot(dx, dy)
-        if hypotenuse > 0:
-            dx = dx/hypotenuse*self.velocity
-            dy = dy/hypotenuse*self.velocity
-        '''
+
+
         self.rect.move_ip(dx, dy)
+        self.ability_rect.center = self.rect.center
             
         self.rect.clamp_ip(self.screen.get_rect())
         
+        if self.invincible:
+            self.powerup_duration -= 1
+            if self.powerup_duration <= 0:
+                self.invincible = False
+        
+        if not self.invincible:
+            self.image.set_alpha(255)
+            self.image = self.normal_image
+            
+
+        
+    def take_damage(self):
+        if not self.invincible:
+            self.health -= 1
+            self.invincible = True
+            self.powerup_duration = 300
+            self.image.set_alpha(150) # transparent if invincible
+        
+    def fly(self):
+        self.score += 5
+        self.abs_posy += 1500
+        self.invincible = True
+        self.powerup_duration = 300
+        self.image = self.fly_image
+                
+                
     def reset(self):
         self.rect.center = (self.screen.get_width()/2, self.screen.get_height()/1.5) #start game at bottom middle
+        self.health = 3
+        self.invincible = False
+        self.powerup_duration = 0
+        self.abs_posy = 0
+        self.score = 0
+        self.image = self.normal_image
+        
+        
+            

@@ -95,7 +95,7 @@ while running:
                             powerupCountdown = 600
             
             #gravity stuff
-            difference_pov_y = 1 + max(HEIGHT/3.5 - player.rect.centery, 0)/30
+            difference_pov_y = 1 + max(HEIGHT/3 - player.rect.centery, 0)/10
             for sprite in all_sprites:
                 sprite.rect.y += difference_pov_y
             for lane in gameworld.lanes:

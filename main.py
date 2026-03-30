@@ -44,7 +44,7 @@ powerGroup = pygame.sprite.Group()
 gameworld = gameworld.Game_World(screen)
 game_state = State.MENU
 running = True
-
+powerupCountdown = 600
 while running:
     clock.tick(FPS)
     
@@ -85,11 +85,14 @@ while running:
                     all_sprites.add(new_car)
 
             if len(powerGroup) < 1:
-                powerups = gameworld.spawn_powerup()
-                for powerup in powerups:
-                    if powerup:
-                        powerGroup.add(powerup)
-                        all_sprites.add(powerup)
+                powerupCountdown -= 1
+                if powerupCountdown <= 0:
+                    powerups = gameworld.spawn_powerup()
+                    for powerup in powerups:
+                        if powerup:
+                            powerGroup.add(powerup)
+                            all_sprites.add(powerup)
+                            powerupCountdown = 600
             
             #gravity stuff
             difference_pov_y = 1 + max(HEIGHT/3.5 - player.rect.centery, 0)/30

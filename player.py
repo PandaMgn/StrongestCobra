@@ -45,6 +45,8 @@ class Player(pygame.sprite.Sprite):
             dx += 5
         if keys[pygame.K_DOWN]:
             dy += 5
+        if keys[pygame.K_w]:
+            self.score += 5
         
         self.abs_posy -= dy
         self.score = max(self.score, self.abs_posy//300)

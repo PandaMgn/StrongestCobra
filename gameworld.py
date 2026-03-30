@@ -4,6 +4,7 @@ import car
 import random
 import time
 import powerup
+import math
 
 class Game_World:
     def __init__(self, screen):
@@ -30,12 +31,14 @@ class Game_World:
             lane = Lane(self.screen, -500, speed)
             self.lanes.append(lane)    
             
-               
+        cars = []
+        
         while len(self.lanes) < 4: #four lanes at a time, three on screen, one up there
             lane = Lane(self.screen, -200, speed)
             self.lanes.append(lane)
+            new_car = lane.spawn_car_initial()
+            cars.append(new_car)
 
-        cars = []
 
         for lane in self.lanes:
             lane.update()
@@ -81,6 +84,7 @@ class Lane(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (self.w, 100))
         self.rect = self.image.get_rect()
         self.rect.center = (self.w/2, y)
+
     
     def spawn_car(self):
         self.spawn_timer += random.randint(0,4)
@@ -89,6 +93,11 @@ class Lane(pygame.sprite.Sprite):
             new_car = car.Car(self.rect.y, self.screen, self.speed, self.direction)
             return new_car
         return None
+    
+    def spawn_car_initial(self):
+        new_car = car.Car(self.rect.y, self.screen, self.speed, self.direction)
+        new_car.rect.x = random.randint(0, self.w)
+        return new_car
     
     def update(self):
         self.screen.blit(self.image, self.rect)

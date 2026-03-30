@@ -17,22 +17,22 @@ class Game_World:
         #background stuff
         None
         
-    def spawn_lane(self):
+    def spawn_lane(self, speed):
         
         #starting lanes
         if len(self.lanes) <= 1:
-            lane = Lane(self.screen, 400)
+            lane = Lane(self.screen, 400, speed)
             self.lanes.append(lane)
-            lane = Lane(self.screen, 100)
+            lane = Lane(self.screen, 100, speed)
             self.lanes.append(lane)
-            lane = Lane(self.screen, -200)
+            lane = Lane(self.screen, -200, speed)
             self.lanes.append(lane)
-            lane = Lane(self.screen, -500)
+            lane = Lane(self.screen, -500, speed)
             self.lanes.append(lane)    
             
                
         while len(self.lanes) < 4: #four lanes at a time, three on screen, one up there
-            lane = Lane(self.screen, -200)
+            lane = Lane(self.screen, -200, speed)
             self.lanes.append(lane)
 
         cars = []
@@ -68,11 +68,11 @@ class Game_World:
         self.score = 0
 
 class Lane(pygame.sprite.Sprite):
-    def __init__(self, screen, y):
+    def __init__(self, screen, y, speed):
         super().__init__()
         self.screen = screen
         self.w, self.h = screen.get_size()
-        self.speed = random.randint(3,6)
+        self.speed = speed
         self.spawn_timer = 251 #spawn a car immediatley
         self.direction = random.choice(["R", "L"])
         self.pos = y

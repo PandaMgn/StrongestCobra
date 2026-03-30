@@ -14,6 +14,9 @@ class Game_Screen:
         self.start_button =  Button("Start Game", (self.w/2, self.h/1.5), (200, 50), self.subtitle_font, (255,255,255), (0,0,0)) #button in here becaues its an object and not temporary
         self.ability_button = Button("Ability", (50+15, self.h-25-15), (100, 50), self.subtitle_font, (255,255,255), (0,0,0)) #bottom left corner for now
         self.replay_button = Button("Replay Game", (self.w/2, self.h/1.5), (200, 50), self.subtitle_font, (255,255,255), (0,0,0))
+
+        #input box
+        self.name_select = InputBox(self.w/2 - 100, self.h/ 2 - 25, 200, 50, "Your name")
         
     
     def draw_start_screen(self): #add char select feature
@@ -23,6 +26,10 @@ class Game_Screen:
         titleRect.center = (self.w/2, self.h/4)
         self.screen.blit(title, titleRect)
         self.start_button.draw(self.screen)
+
+        self.name_select.update()
+        self.name_select.draw(self.screen)
+        
         
     def draw_game_screen(self): #if not here then overlays over everyting
         self.screen.fill((0,0,0))
@@ -38,6 +45,7 @@ class Game_Screen:
         titleRect = health_title.get_rect()
         titleRect.topleft = (12, 60)
         self.screen.blit(health_title, titleRect)
+        self
 
     def draw_end_screen(self, score):
         self.screen.fill((0,0,0))

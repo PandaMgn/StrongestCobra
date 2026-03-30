@@ -9,6 +9,7 @@ import enum
 import menu
 from player import Player
 import gameworld
+import math
 
 class State(enum.Enum):
     MENU = enum.auto()
@@ -78,7 +79,7 @@ while running:
             
         
             #spawn stuff
-            cars = gameworld.spawn_lane()
+            cars = gameworld.spawn_lane(math.log2(player.score+1.5) + 3) # difficulty curvbe
             for new_car in cars:
                 if new_car:
                     carGrp.add(new_car)

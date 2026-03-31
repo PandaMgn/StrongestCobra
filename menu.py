@@ -45,17 +45,21 @@ class Game_Screen:
         titleRect = health_title.get_rect()
         titleRect.topleft = (12, 60)
         self.screen.blit(health_title, titleRect)
-        self
+        
+        player_name_title = self.title_font.render(f"{self.name_select.text}", True, (255, 255, 255))
+        titleRect = player_name_title.get_rect()
+        titleRect.topright = (self.w - 12, 12)
+        self.screen.blit(player_name_title, titleRect)
 
     def draw_end_screen(self, score):
         self.screen.fill((0,0,0))
         title = self.title_font.render("Game Over", True, (255,255,255))
         titleRect = title.get_rect()
-        titleRect.center = (self.w/2, self.h/4)
+        titleRect.midtop = (self.w/2, 24)
         self.screen.blit(title, titleRect)
         subtitle = self.subtitle_font.render(f"Your Score: {score}", True, (255,255,255))
         subtitleRect = subtitle.get_rect()
-        subtitleRect.center = (self.w/2, self.h/3)
+        subtitleRect.midtop = (self.w/2, 24+50)
         self.screen.blit(subtitle, subtitleRect)
         self.replay_button.draw(self.screen)
         
@@ -113,26 +117,18 @@ class InputBox:
         self.active = False
 
     def handle_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            # If the user clicked on the input_box rect.
-            if self.rect.collidepoint(event.pos):
-                # Toggle the active variable.
-                self.active = not self.active
-            else:
-                self.active = False
-            # Change the current color of the input box.
-            self.color = COLOR_ACTIVE if self.active else COLOR_INACTIVE
+        self.color = COLOR_ACTIVE
+        
         if event.type == pygame.KEYDOWN:
-            if self.active:
-                if event.key == pygame.K_RETURN:
-                    print(self.text)
-                    self.text = ''
-                elif event.key == pygame.K_BACKSPACE:
+            if event.key == pygame.K_RETURN:
+                print(self.text)
+                self.text = ''
+            elif event.key == pygame.K_BACKSPACE:
                     self.text = self.text[:-1]
-                else:
+            else:
                     self.text += event.unicode
-                # Re-render the text.
-                self.txt_surface = FONT.render(self.text, True, self.color)
+            # Re-render the text.
+            self.txt_surface = FONT.render(self.text, True, self.color)
 
     def update(self):
         # Resize the box if the text is too long.

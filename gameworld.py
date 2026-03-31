@@ -88,7 +88,7 @@ class Lane(pygame.sprite.Sprite):
     
     def spawn_car(self):
         self.spawn_timer += random.randint(0,4)
-        if self.spawn_timer > 250:
+        if self.spawn_timer > (500) / math.pow(self.speed, 0.3):
             self.spawn_timer = 0
             new_car = car.Car(self.rect.y, self.screen, self.speed, self.direction)
             return new_car

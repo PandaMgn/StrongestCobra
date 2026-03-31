@@ -9,6 +9,7 @@ import enum
 import menu
 from player import Player
 import gameworld
+from leaderboard import Leaderboard, LeaderboardUI
 import math
 
 class State(enum.Enum):
@@ -41,6 +42,7 @@ all_sprites = pygame.sprite.Group()
 carGrp = pygame.sprite.Group()
 powerGroup = pygame.sprite.Group()
 
+player_name = ""
 
 gameworld = gameworld.Game_World(screen)
 game_state = State.MENU
@@ -49,7 +51,7 @@ powerupCountdown = 600
 while running:
     clock.tick(FPS)
     
-    space_pressed = False
+    enter_pressed = False
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -58,9 +60,14 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 running = False
-            if event.key == pygame.K_SPACE:
-                space_pressed = True
-
+            if event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN:
+                enter_pressed = True
+        
+        if game_state == State.MENU:
+            start_screen.name_select.handle_event(event)
+        if game_state == State.END:
+            leaderboard_ui.handle_input(event)
+        #print(event)
             
     match game_state:
         case State.MENU:
@@ -70,9 +77,11 @@ while running:
             powerGroup.empty()
             player.reset()
             start_screen.draw_start_screen()
-            if start_screen.start_button.is_clicked(event) or space_pressed:
+
+            if start_screen.start_button.is_clicked(event) or enter_pressed:
                 all_sprites.add(player)
                 game_state = State.GAME
+                player_name = start_screen.name_select.text
 
         case State.GAME:
             game_screen.draw_game_screen()
@@ -118,9 +127,13 @@ while running:
 
 
             '''here for testing'''
-            if game_screen.ability_button.is_clicked(event) or space_pressed:
+            if game_screen.ability_button.is_clicked(event) or enter_pressed:
                 game_state = State.END #here for now prolly change later ig 
+                leaderboard = Leaderboard("leaderboard.db")
+                leaderboard.save_score(player_name, player.score)
+                print(leaderboard.get_top_scores(10))
 
+                leaderboard_ui = LeaderboardUI(screen, leaderboard, title_font, subtitle_font)
             #draw stuff
             all_sprites.update()
             all_sprites.draw(screen)
@@ -130,7 +143,9 @@ while running:
 
         case State.END:
             end_screen.draw_end_screen(player.score)
-            if end_screen.replay_button.is_clicked(event) or space_pressed:
+            leaderboard_ui.draw()
+
+            if end_screen.replay_button.is_clicked(event) or enter_pressed:
                 game_state = State.MENU
 
     pygame.display.flip()

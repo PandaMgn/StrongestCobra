@@ -13,7 +13,7 @@ class Game_Screen:
         #buttons
         self.start_button =  Button("Start Game", (self.w/2, self.h/1.5), (200, 50), self.subtitle_font, (255,255,255), (0,0,0)) #button in here becaues its an object and not temporary
         self.ability_button = Button("Ability", (50+15, self.h-25-15), (100, 50), self.subtitle_font, (255,255,255), (0,0,0)) #bottom left corner for now
-        self.replay_button = Button("Replay Game", (self.w/2, self.h/1.5), (200, 50), self.subtitle_font, (255,255,255), (0,0,0))
+        self.replay_button = Button("Replay Game", (self.w/2, self.h-25-50), (200, 50), self.subtitle_font, (255,255,255), (0,0,0))
 
         #input box
         self.name_select = InputBox(self.w/2 - 100, self.h/ 2 - 25, 200, 50, "Your name")

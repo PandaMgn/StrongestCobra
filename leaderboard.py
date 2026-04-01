@@ -136,7 +136,7 @@ class LeaderboardUI:
     Handles pygame rendering and scrolling UI for the leaderboard.
     """
     
-    def __init__(self, screen, leaderboard, title_font, subtitle_font, x=50, y=180, width=540, height=400):
+    def __init__(self, screen, leaderboard, title_font, subtitle_font, x=50, y=480-240, width=540, height=500):
         """
         Initialize the leaderboard UI.
         

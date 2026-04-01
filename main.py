@@ -44,8 +44,6 @@ playerGroup = pygame.sprite.Group()
 
 
 player_name = ""
-player = Player((200, 200), 5, screen, "assets/CoolCobra.png", "assets/WingedCobra.png")
-
 
 gameworld = gameworld.Game_World(screen)
 game_state = State.MENU
@@ -86,12 +84,16 @@ while running:
 
             if current_event != None:
                 if start_screen.cobrabutton.is_clicked(current_event):
-                    print("67")
+                    player = Player((200, 200), 5, screen, "assets/CoolCobra.png", "assets/WingedCobra.png")
+                    playerGroup.empty()
+                    all_sprites.empty()
                     playerGroup.add(player)
                     all_sprites.add(player)
 
                 if start_screen.foxbutton.is_clicked(current_event):
-                    player = Player((200, 200), 5, screen, "assets/CoolFox.png", "assets/WingedCobra.png")
+                    player = Player((200, 200), 5, screen, "assets/CoolFox.png", "assets/HidingFox.png")
+                    playerGroup.empty()
+                    all_sprites.empty()
                     playerGroup.add(player)
                     all_sprites.add(player)
 

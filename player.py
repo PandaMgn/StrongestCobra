@@ -72,14 +72,14 @@ class Player(pygame.sprite.Sprite):
         if not self.invincible:
             self.health -= 1
             self.invincible = True
-            self.powerup_duration = 300
+            self.powerup_duration = 180
             self.image.set_alpha(100) # transparent if invincible
         
     def fly(self):
         self.score += 5
         self.abs_posy += 1500
         self.invincible = True
-        self.powerup_duration = 300
+        self.powerup_duration = 180
         self.image = self.fly_image
                 
                 

@@ -37,23 +37,30 @@ start_screen = menu.Game_Screen(screen, title_font, subtitle_font)
 game_screen = menu.Game_Screen(screen, title_font, subtitle_font)
 end_screen = menu.Game_Screen(screen, title_font, subtitle_font)
 
-player = Player((200, 200), 5, screen, "", "")
 all_sprites = pygame.sprite.Group()
 carGrp = pygame.sprite.Group()
 powerGroup = pygame.sprite.Group()
+playerGroup = pygame.sprite.Group()
+
 
 player_name = ""
+player = Player((200, 200), 5, screen, "assets/CoolCobra.png", "assets/WingedCobra.png")
+
 
 gameworld = gameworld.Game_World(screen)
 game_state = State.MENU
 running = True
 powerupCountdown = 600
+
 while running:
     clock.tick(FPS)
     
     enter_pressed = False
-    
+    space_pressed = False
+    current_event = None
+
     for event in pygame.event.get():
+        current_event = event
         if event.type == pygame.QUIT:
             running = False
             
@@ -62,6 +69,8 @@ while running:
                 running = False
             if event.key == pygame.K_KP_ENTER or event.key == pygame.K_RETURN:
                 enter_pressed = True
+            if event.key == pygame.K_SPACE:
+                space_pressed = True
         
         if game_state == State.MENU:
             start_screen.name_select.handle_event(event)
@@ -72,21 +81,26 @@ while running:
     match game_state:
         case State.MENU:
             gameworld.reset()
-            all_sprites.empty()
-            carGrp.empty()
-            powerGroup.empty()
-            player.reset()
             start_screen.draw_start_screen()
 
-            if start_screen.start_button.is_clicked(event) or enter_pressed:
-                all_sprites.add(player)
-                game_state = State.GAME
-                player_name = start_screen.name_select.text
+
+            if current_event != None:
+                if start_screen.cobrabutton.is_clicked(current_event):
+                    print("67")
+                    playerGroup.add(player)
+                    all_sprites.add(player)
+
+                if start_screen.foxbutton.is_clicked(current_event):
+                    player = Player((200, 200), 5, screen, "assets/CoolFox.png", "assets/WingedCobra.png")
+                    playerGroup.add(player)
+                    all_sprites.add(player)
+
+                if start_screen.start_button.is_clicked(current_event) and len(playerGroup) == 1:
+                    game_state = State.GAME
 
         case State.GAME:
             game_screen.draw_game_screen()
             
-        
             #spawn stuff
             cars = gameworld.spawn_lane(math.pow(player.score, 0.7) + 3) # difficulty curvbe
             for new_car in cars:
@@ -116,6 +130,7 @@ while running:
             if hits:
                 player.take_damage()
                 if player.health == 0:
+                    player.reset()
                     game_state = State.END
             
 
@@ -123,17 +138,18 @@ while running:
             for powerup in hit:
                 powerup.kill()
                 player.fly()
-                #Player.fly()
+                #player.fly()
 
 
             '''here for testing'''
-            if game_screen.ability_button.is_clicked(event) or enter_pressed:
+            if current_event and game_screen.ability_button.is_clicked(current_event) or space_pressed:
                 game_state = State.END #here for now prolly change later ig 
                 leaderboard = Leaderboard("leaderboard.db")
                 leaderboard.save_score(player_name, player.score)
                 print(leaderboard.get_top_scores(10))
 
                 leaderboard_ui = LeaderboardUI(screen, leaderboard, title_font, subtitle_font)
+
             #draw stuff
             all_sprites.update()
             all_sprites.draw(screen)
@@ -145,7 +161,11 @@ while running:
             end_screen.draw_end_screen(player.score)
             leaderboard_ui.draw()
 
-            if end_screen.replay_button.is_clicked(event) or enter_pressed:
+            if current_event and end_screen.replay_button.is_clicked(current_event) or space_pressed:
+                playerGroup.empty()
+                all_sprites.empty()
+                carGrp.empty()
+                powerGroup.empty()
                 game_state = State.MENU
 
     pygame.display.flip()

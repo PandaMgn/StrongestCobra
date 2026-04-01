@@ -11,8 +11,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos, velocity, screen, normal_image, ability_image):
         super(Player, self).__init__()
         
-        self.normal_image = pygame.image.load("assets/CoolCobra.png").convert_alpha()
-        self.fly_image = pygame.image.load("assets/WingedCobra.png").convert_alpha()
+        self.normal_image = pygame.image.load(normal_image).convert_alpha()
+        self.fly_image = pygame.image.load(ability_image).convert_alpha()
         self.normal_image = pygame.transform.scale(self.normal_image, (100,100))
         self.fly_image = pygame.transform.scale(self.fly_image, (140,140))
         self.image = self.normal_image
@@ -91,6 +91,5 @@ class Player(pygame.sprite.Sprite):
         self.abs_posy = 0
         self.score = 0
         self.image = self.normal_image
-        
         
             

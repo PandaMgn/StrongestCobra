@@ -22,7 +22,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (self.screen.get_width()/2, self.screen.get_height()/1.5) #start game at bottom middle
         self.mask = pygame.mask.from_surface(self.image)
 
-        self.health = 3
+        self.health = 10
         self.invincible = False
         self.powerup_duration = 0 #just invincibility
         

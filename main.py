@@ -132,6 +132,11 @@ while running:
                 if player.health == 0:
                     player.reset()
                     game_state = State.END
+                    leaderboard = Leaderboard("leaderboard.db")
+                    leaderboard.save_score(player_name, player.score)
+                    print(leaderboard.get_top_scores(10))
+
+                    leaderboard_ui = LeaderboardUI(screen, leaderboard, title_font, subtitle_font)
             
 
             hit = pygame.sprite.spritecollide(player, powerGroup, False, pygame.sprite.collide_mask)

@@ -44,8 +44,10 @@ playerGroup = pygame.sprite.Group()
 
 
 player_name = ""
+leaderboard_ui = None
 
-gameworld = gameworld.Game_World(screen)
+
+world = gameworld.Game_World(screen)
 game_state = State.MENU
 running = True
 powerupCountdown = 600
@@ -78,9 +80,8 @@ while running:
             
     match game_state:
         case State.MENU:
-            gameworld.reset()
+            world.reset()
             start_screen.draw_start_screen()
-
 
             if current_event != None:
                 if start_screen.cobrabutton.is_clicked(current_event):
@@ -98,13 +99,14 @@ while running:
                     all_sprites.add(player)
 
                 if start_screen.start_button.is_clicked(current_event) and len(playerGroup) == 1:
+                    player_name = start_screen.name_select.text
                     game_state = State.GAME
 
         case State.GAME:
             game_screen.draw_game_screen()
             
             #spawn stuff
-            cars = gameworld.spawn_lane(math.pow(player.score, 0.7) + 3) # difficulty curvbe
+            cars = world.spawn_lane(math.pow(player.score, 0.5) + 3) # difficulty curvbe
             for new_car in cars:
                 if new_car:
                     carGrp.add(new_car)
@@ -113,7 +115,7 @@ while running:
             if len(powerGroup) < 1:
                 powerupCountdown -= 1
                 if powerupCountdown <= 0:
-                    powerups = gameworld.spawn_powerup()
+                    powerups = world.spawn_powerup()
                     for powerup in powerups:
                         if powerup:
                             powerGroup.add(powerup)
@@ -124,7 +126,7 @@ while running:
             difference_pov_y = 1 + max(HEIGHT/3 - player.rect.centery, 0)/10
             for sprite in all_sprites:
                 sprite.rect.y += difference_pov_y
-            for lane in gameworld.lanes:
+            for lane in world.lanes:
                 lane.rect.y += difference_pov_y
                            
             #collision stuff
@@ -132,11 +134,12 @@ while running:
             if hits:
                 player.take_damage()
                 if player.health == 0:
-                    player.reset()
                     game_state = State.END
                     leaderboard = Leaderboard("leaderboard.db")
                     leaderboard.save_score(player_name, player.score)
+                    print("Saving:", player_name, player.score)
                     print(leaderboard.get_top_scores(10))
+                    player.reset()
 
                     leaderboard_ui = LeaderboardUI(screen, leaderboard, title_font, subtitle_font)
             
@@ -145,28 +148,21 @@ while running:
             for powerup in hit:
                 powerup.kill()
                 player.fly()
-                #player.fly()
 
-
-            '''here for testing'''
             if current_event and game_screen.ability_button.is_clicked(current_event) or space_pressed:
-                game_state = State.END #here for now prolly change later ig 
-                leaderboard = Leaderboard("leaderboard.db")
-                leaderboard.save_score(player_name, player.score)
-                print(leaderboard.get_top_scores(10))
-
-                leaderboard_ui = LeaderboardUI(screen, leaderboard, title_font, subtitle_font)
+                player.ability(carGrp)
 
             #draw stuff
             all_sprites.update()
             all_sprites.draw(screen)
             screen.blit(player.image, player.rect)  # draw player LAST
                  
-            game_screen.draw_game_menu(player.score, player.health)
+            game_screen.draw_game_menu(player.score, player.health, player_name)
 
         case State.END:
             end_screen.draw_end_screen(player.score)
-            leaderboard_ui.draw()
+            if leaderboard_ui:
+                leaderboard_ui.draw()
 
             if current_event and end_screen.replay_button.is_clicked(current_event) or space_pressed:
                 playerGroup.empty()

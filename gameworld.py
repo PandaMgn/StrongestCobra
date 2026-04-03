@@ -56,7 +56,7 @@ class Game_World:
         powerups = []
 
 
-        if random.random() < 0.01 and len(powerups) < 1:
+        if random.random() < 0.01:
             new_powerup = powerup.Powerup(self.screen, "assets/Wings.png")
             powerups.append(new_powerup)
 

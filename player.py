@@ -22,13 +22,13 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (self.screen.get_width()/2, self.screen.get_height()/1.5) #start game at bottom middle
         self.mask = pygame.mask.from_surface(self.image)
 
-        self.health = 10
+        self.health = 5
         self.invincible = False
         self.powerup_duration = 0 #just invincibility
         
-        self.ability_rect = pygame.Rect(0,0,200,200) #zone around player that activates ability
+        self.ability_rect = pygame.Rect(0, 0, 250, 250)
         self.ability_cd = 0
-
+    
         self.pos = pos
         self.velocity = velocity
     
@@ -61,12 +61,12 @@ class Player(pygame.sprite.Sprite):
             self.powerup_duration -= 1
             if self.powerup_duration <= 0:
                 self.invincible = False
+                self.image = self.normal_image
+                self.image.set_alpha(255)
+                
+        if self.ability_cd > 0:
+            self.ability_cd -= 1
         
-        if not self.invincible:
-            self.image.set_alpha(255)
-            self.image = self.normal_image
-            
-
         
     def take_damage(self):
         if not self.invincible:
@@ -81,11 +81,28 @@ class Player(pygame.sprite.Sprite):
         self.invincible = True
         self.powerup_duration = 180
         self.image = self.fly_image
-                
-                
+        
+        
+    def ability(self, carGrp):
+        destroyed = 0
+        if self.ability_cd <= 0:
+            print("ready")
+            for car in carGrp:
+                if self.ability_rect.colliderect(car.rect):
+                    car.kill()
+                    destroyed += 1
+        if destroyed > 0:
+            self.score += destroyed*10
+            self.abs_posy += destroyed*500
+            self.health += destroyed
+            self.ability_cd = 300
+            
+            
+            
+            
     def reset(self):
         self.rect.center = (self.screen.get_width()/2, self.screen.get_height()/1.5) #start game at bottom middle
-        self.health = 3
+        self.health = 5
         self.invincible = False
         self.powerup_duration = 0
         self.abs_posy = 0

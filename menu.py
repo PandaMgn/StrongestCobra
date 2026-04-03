@@ -16,7 +16,7 @@ class Game_Screen:
         self.replay_button = Button("Replay Game", (self.w/2, self.h-25-50), (200, 50), self.subtitle_font, (255,255,255), (0,0,0))
 
         #input box
-        self.name_select = InputBox(self.w/2 - 100, self.h/ 2 - 25, 200, 50, "Your name")
+        self.name_select = InputBox(self.w/2 - 100, self.h/ 2 - 25, 200, 50, "")
         
         self.cobrabutton = Button("", (self.w/1.4, self.h/4), (200, 200), self.subtitle_font, (0,0,0), (0,0,0), "assets/CoolCobra.png")
         self.foxbutton = Button("", (self.w/3.1, self.h/4), (200, 200), self.subtitle_font, (0,0,0), (0,0,0), "assets/CoolFox.png")
@@ -40,7 +40,7 @@ class Game_Screen:
     def draw_game_screen(self): #if not here then overlays over everyting
         self.screen.fill((0,0,0))
         
-    def draw_game_menu(self, score, health):
+    def draw_game_menu(self, score, health, player_name):
         self.ability_button.draw(self.screen)
         score_title = self.title_font.render(f"Score: {score}", True, (255, 255, 255))
         titleRect = score_title.get_rect()
@@ -52,7 +52,7 @@ class Game_Screen:
         titleRect.topleft = (12, 60)
         self.screen.blit(health_title, titleRect)
         
-        player_name_title = self.title_font.render(f"{self.name_select.text}", True, (255, 255, 255))
+        player_name_title = self.title_font.render(f"{player_name}", True, (255, 255, 255))
         titleRect = player_name_title.get_rect()
         titleRect.topright = (self.w - 12, 12)
         self.screen.blit(player_name_title, titleRect)

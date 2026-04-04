@@ -78,11 +78,12 @@ while running:
             leaderboard_ui.handle_input(event)
         #print(event)
             
+            
     match game_state:
         case State.MENU:
             world.reset()
             start_screen.draw_start_screen()
-
+            #player selector
             if current_event != None:
                 if start_screen.cobrabutton.is_clicked(current_event):
                     player = Player((200, 200), 5, screen, "assets/CoolCobra.png", "assets/WingedCobra.png")
@@ -97,7 +98,7 @@ while running:
                     all_sprites.empty()
                     playerGroup.add(player)
                     all_sprites.add(player)
-
+                #name
                 if start_screen.start_button.is_clicked(current_event) and len(playerGroup) == 1:
                     player_name = start_screen.name_select.text
                     game_state = State.GAME
@@ -143,7 +144,6 @@ while running:
 
                     leaderboard_ui = LeaderboardUI(screen, leaderboard, title_font, subtitle_font)
             
-
             hit = pygame.sprite.spritecollide(player, powerGroup, False, pygame.sprite.collide_mask)
             for powerup in hit:
                 powerup.kill()

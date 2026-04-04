@@ -2,6 +2,7 @@ import pygame
 import math
 
 class Player(pygame.sprite.Sprite):
+    '''class for the player, handles movement and stuff'''
     pos = None
     velocity = None
 

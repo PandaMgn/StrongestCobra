@@ -7,6 +7,7 @@ import powerup
 import math
 
 class Game_World:
+    '''Game world logic, like how the lanes work and how items spawn'''
     def __init__(self, screen):
         self.screen = screen
         self.w, self.h = screen.get_size()
@@ -71,6 +72,7 @@ class Game_World:
         self.score = 0
 
 class Lane(pygame.sprite.Sprite):
+    '''acts as a spawner for the cars, auto moves down the screen and stuff'''
     def __init__(self, screen, y, speed):
         super().__init__()
         self.screen = screen

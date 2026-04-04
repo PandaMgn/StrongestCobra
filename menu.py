@@ -1,9 +1,7 @@
 import pygame
 
 class Game_Screen:
-    '''
-    class for the screens shown during the game
-    '''
+    '''class for the screens shown during the game'''
     def __init__(self, screen, title_font, subtitle_font):
         self.screen = screen
         self.w, self.h = screen.get_size()
@@ -41,6 +39,7 @@ class Game_Screen:
         self.screen.fill((0,0,0))
         
     def draw_game_menu(self, score, health, player_name):
+        #draws the ui while the game is running like health, name and  ability as well as score
         self.ability_button.draw(self.screen)
         score_title = self.title_font.render(f"Score: {score}", True, (255, 255, 255))
         titleRect = score_title.get_rect()
@@ -59,6 +58,7 @@ class Game_Screen:
 
 
     def draw_end_screen(self, score):
+        #draws end screen
         self.screen.fill((0,0,0))
         title = self.title_font.render("Game Over", True, (255,255,255))
         titleRect = title.get_rect()

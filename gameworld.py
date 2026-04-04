@@ -1,5 +1,5 @@
 import pygame
-import background
+#import background
 import car
 import random
 import time

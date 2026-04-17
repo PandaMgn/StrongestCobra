@@ -94,7 +94,7 @@ class Player(pygame.sprite.Sprite):
                     destroyed += 1
         if destroyed > 0:
             self.score += destroyed*10
-            self.abs_posy += destroyed*1000
+            self.abs_posy += destroyed*3000
             self.health += destroyed
             self.ability_cd = 300
             

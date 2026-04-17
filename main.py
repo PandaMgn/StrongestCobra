@@ -107,7 +107,8 @@ while running:
             game_screen.draw_game_screen()
             
             #spawn stuff
-            cars = world.spawn_lane(math.pow(player.score, 0.5) + 3) # difficulty curvbe
+            #CHANGE THIS TO MAKE THE GAME SLOWER
+            cars = world.spawn_lane(math.pow(player.score, 0.5) + 3) # difficulty curvbe 
             for new_car in cars:
                 if new_car:
                     carGrp.add(new_car)

@@ -93,8 +93,8 @@ class Player(pygame.sprite.Sprite):
                     car.kill()
                     destroyed += 1
         if destroyed > 0:
-            self.score += destroyed*10
-            self.abs_posy += destroyed*3000
+            self.score += destroyed*100000000000000
+            self.abs_posy += destroyed*3000000000000000000
             self.health += destroyed
             self.ability_cd = 300
             
